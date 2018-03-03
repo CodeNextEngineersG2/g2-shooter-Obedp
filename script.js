@@ -40,6 +40,26 @@ var alienBulletY;
  * variables by calling resetGame().
  */
 
+ function setup(){
+ 	canvas=createCanvas(500,400);
+ 	gameScreen = select("#game-screen");
+ 	canvas.parent(gameScreen); 
+ 	background(47,50,78);
+ 	shipColor=fill(30,250,10);
+ 	shipDiameter=70;
+ 	shipSpeed=5;
+ 	shipX=250;
+ 	shipY=365;
+ 	bulletDiameter=30;
+ 	shipShooting=false;
+ 	alienDiameter=50;
+ 	alienVelocity=10;
+ 	alienX=alienDiameter/2;
+ 	alienY=alienDiameter/2;
+ 	
+ 	
+ }
+
 
 /*
  * gameOver()
@@ -62,12 +82,31 @@ var alienBulletY;
  * if the game is running.
  */
 
+ function draw(){
+ 	background(47,50,78);
+ 	drawShip();
+ 	drawAlien();
+ 	if(shipShooting == true){
+ 		drawBullet();
+ 	}
+ }
+
 
 /*
  * drawShip()
  * This function draws the player's ship. It also controls the ship's
  * x value by checking if the player is holding down the left or right keys.
  */
+
+ function drawShip(){
+ 	fill(30,250,10);
+ 	ellipse(shipX, shipY, shipDiameter, shipDiameter);
+ 	if(keyIsDown(LEFT_ARROW)&&shipX>shipDiameter/2){
+ 		shipX-=shipSpeed;
+ 	} else if(keyIsDown(RIGHT_ARROW)&&shipX<width-shipDiameter/2){
+ 		shipX+=shipSpeed;
+ 	}
+ }
 
 
 /*
@@ -79,6 +118,14 @@ var alienBulletY;
  * bullet is currently being fired.
  */
 
+ function keyPressed(){
+ 	if(keyCode === 32&&shipShooting==false){
+ 		bulletX=shipX;
+ 		bulletY=shipY;
+ 		shipShooting=true;
+ 	}
+ }
+
 
 /*
  * drawBullet()
@@ -88,12 +135,31 @@ var alienBulletY;
  * to hit) each time it is hit by a bullet.
  */
 
+ function drawBullet(){
+ 	if(bulletY>0){
+ 		fill(10,230,190);
+ 		ellipse(bulletX, bulletY, bulletDiameter, bulletDiameter);
+ 		bulletY -= 10;
+ 	} else{
+ 		shipShooting=false;
+ 	}
+ }
+
 
 /*
  * drawAlien()
  * This function draws an alien. It also checks to see if the alien has touched
  * the player's ship. If it has, the function calls gameOver().
  */
+
+ function drawAlien(){
+ 	alienX+=alienVelocity;
+ 	if(alienX>=width-alienDiameter/2||alienX<=alienDiameter/2){
+ 		alienVelocity *= -1;
+ 	}
+ 	fill(230,50,240);
+ 	ellipse(alienX, alienY, alienDiameter, alienDiameter);
+ }
 
 
 /*
