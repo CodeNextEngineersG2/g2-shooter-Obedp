@@ -45,21 +45,9 @@ var alienBulletY;
  	gameScreen = select("#game-screen");
  	canvas.parent(gameScreen); 
  	background(0);
- 	shipColor=fill(30,250,10);
- 	shipDiameter=70;
- 	shipSpeed=5;
- 	shipX=250;
- 	shipY=365;
- 	bulletDiameter=30;
- 	shipShooting=false;
- 	alienDiameter=50;
- 	alienVelocity=10;
- 	alienX=alienDiameter/2;
- 	alienY=alienDiameter/2;
- 	alienBulletDiameter=20;
- 	alienShooting=false;
- 	
- 	
+ 	scoreDisplay=select("#score-display");
+ 	shipColor=fill(30,250,10);	
+ 	resetGame();
  }
 
 
@@ -72,7 +60,7 @@ var alienBulletY;
 
  function gameOver(){
  	window.alert("The Alien has invaded Earth! Game Over!")
- 	setup();
+ 	resetGame();
  }
 
 
@@ -82,6 +70,24 @@ var alienBulletY;
  * variables.
  */
 
+ function resetGame(){
+	shipDiameter=70;
+ 	shipSpeed=10;
+ 	shipX=250;
+ 	shipY=365;
+ 	bulletDiameter=30;
+ 	shipShooting=false;
+ 	alienDiameter=50;
+ 	alienVelocity=10;
+ 	alienX=alienDiameter/2;
+ 	alienY=alienDiameter/2;
+ 	alienBulletDiameter=20;
+ 	alienShooting=false;
+ 	score=0;
+ 	scoreDisplay.html(score);
+ 	gameRunning=true;
+ }
+
 
 /*
  * draw()
@@ -90,14 +96,16 @@ var alienBulletY;
  */
 
  function draw(){
- 	background(0);
- 	drawShip();
- 	drawAlien();
- 	if(shipShooting == true){
- 		drawBullet();
- 	}
- 	if(alienShooting == true){
- 		drawAlienBullet();
+ 	if(gameRunning = true){
+ 		background(0);
+ 		drawShip();
+ 		drawAlien();
+ 		if(shipShooting == true){
+ 			drawBullet();
+ 		}
+ 		if(alienShooting == true){
+ 			drawAlienBullet();
+ 		}
  	}
  }
 
@@ -129,7 +137,7 @@ var alienBulletY;
  */
 
  function keyPressed(){
- 	if(keyCode === 32&&shipShooting==false){
+ 	if(keyCode === 32&&shipShooting==false&&gameRunning==true){
  		bulletX=shipX;
  		bulletY=shipY;
  		shipShooting=true;
@@ -155,6 +163,8 @@ var alienBulletY;
  		resetAlien();
  		alienVelocity++;
  		shipShooting = false;
+ 		score++;
+ 		scoreDisplay.html(score);
  	} else{
  		shipShooting=false;
  	}
